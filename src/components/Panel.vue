@@ -1,6 +1,6 @@
 <template>
   <div class="weui-panel weui-panel_access">
-    <div v-for="(n,index) in newsComputed" :key="index" class="weui-panel__bd">
+    <div v-for="(n, index) in panelState.newsComputed" :key="index" class="weui-panel__bd">
       <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
         <div class="weui-media-box__hd">
           <img class="weui-media-box__thumb" :src="n.author.avatar_url" alt />
@@ -19,57 +19,51 @@
     </div>
   </div>
 </template>
-<script>
-import { reactive, toRefs, onMounted, computed } from "@vue/composition-api";
+<script lang="ts" setup>
+import { reactive, toRefs, onMounted, computed } from "vue";
+import { searchStatess } from "../stores/searchState";
+
 import axios from "axios";
-import store from "../stores";
-export default {
-  setup() {
-    const state = reactive({
-      // 页数
-      page: 1,
-      // 列表数据
-      news: [],
-      // 通过搜索框的值去筛选后的新列表数据
-      newsComputed: computed(() => {
-        // 判断是否输入框是否输入了筛选条件，如果没有返回原始的 news 数组
-        if (store.state.searchValue) {
-          return state.news.filter(item => {
-            if (item.title.indexOf(store.state.searchValue) >= 0) {
-              return item;
-            }
-          });
-        } else {
-          return state.news;
-        }
-      }),
-      searchValue: store.state
-    });
-    // 发送 ajax 请求获取列表数据
-    const loadMore = async () => {
-      // 获取列表数据
-      let data = await axios.get("https://cnodejs.org/api/v1/topics", {
-        params: {
-          // 每一页的主题数量
-          limit: 10,
-          // 页数
-          page: state.page
+
+const state = searchStatess()
+//使用reactive封装了一个对象作为响应式对象
+const panelState: any = reactive({
+  // 页数
+  page: 1,
+  // 列表数据
+  news: [],
+  // 通过搜索框的值去筛选后的新列表数据
+  newsComputed: computed(() => {
+    // 判断是否输入框是否输入了筛选条件，如果没有返回原始的 news 数组
+    if (state.searchValue) {
+      return panelState.news.filter(item => {
+        if (item.title.indexOf(state.searchValue) >= 0) {
+          return item;
         }
       });
-      // 叠加页数
-      state.page += 1;
-      state.news = [...state.news, ...data.data.data];
-    };
-    onMounted(() => {
-      // 首屏加载的时候触发请求
-      loadMore();
-    });
-    return {
-      // 让数据保持响应式
-      ...toRefs(state),
-      // 查看更多事件
-      loadMore
-    };
-  }
+    } else {
+      return panelState.news;
+    }
+  }),
+  searchValue: state.searchValue
+});
+// 发送 ajax 请求获取列表数据
+const loadMore = async () => {
+  // 获取列表数据
+  let data = await axios.get("https://cnodejs.org/api/v1/topics", {
+    params: {
+      // 每一页的主题数量
+      limit: 10,
+      // 页数
+      page: panelState.page
+    }
+  });
+  // 叠加页数
+  panelState.page += 1;
+  panelState.news = [...panelState.news, ...data.data.data];
 };
+onMounted(() => {
+  // 首屏加载的时候触发请求
+  loadMore();
+});
 </script>

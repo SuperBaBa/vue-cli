@@ -1,0 +1,18 @@
+{
+  //首先设置在编辑器中保存就格式化代码
+  "editor.formatOnSave": true,
+  //设置prettier作为默认格式化程序
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  //按照语言配置不同语言的格式化设置，per-language
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+
+  // 为ESLint启用“保存时自动修复”，并且仍然具有格式和快速修复功能
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.fixAll.eslint": "explicit"
+  }
+}
