@@ -1,8 +1,6 @@
 <template>
   <div id="app">
     <HomeView />
-    <Search />
-    <Panel />
   </div>
 </template>
 

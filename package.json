@@ -1,8 +1,11 @@
 {
-  "name": "vue-project",
-  "version": "0.1.0",
+  "name": "little-finger-news-vue3.x",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
+  "author": {
+    "name": "superbaba"
+  },
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
