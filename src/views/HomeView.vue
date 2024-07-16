@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header title="Cnode客户端" color="red" />
+    <header title="Cnode客户端" color="red" />
     <Search />
     <Panel />
   </div>
